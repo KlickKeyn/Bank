@@ -1,9 +1,7 @@
-package com.bank.repository;
+package com.bank.dao.repository;
 
-import com.bank.model.Account;
+import com.bank.dao.model.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
     Account findAccountById(Long id);

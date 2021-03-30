@@ -1,15 +1,16 @@
 package com.bank.service.bank_account_service.bank_account_db;
 
 import com.bank.exceptions.account.AccountException;
-import com.bank.model.Account;
-import com.bank.model.Client;
-import com.bank.repository.AccountRepository;
-import com.bank.repository.ClientRepository;
+import com.bank.dao.model.Account;
+import com.bank.dao.model.Client;
+import com.bank.dao.repository.AccountRepository;
+import com.bank.exceptions.client.ClientException;
 import com.bank.service.client_service.client_db.ClientDBService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 //TODO переделать всё на использование сервисов клиента
 
@@ -46,21 +47,49 @@ public class BankAccountDBService implements BankAccountDBInteraction {
 
     @Override
     public Account findById(Long id) {
-        return null;
+        if (id == null) {
+            throw new AccountException("Wrong id");
+        }
+
+        return accountRepository.findById(id).orElseThrow(() -> new AccountException("No account with such id"));
     }
 
     @Override
-    public void save(Long clientId, Account account) {
+    public Account save(Long clientId, Account account) {
+        if (account == null) {
+            throw new AccountException("Account is wrong");
+        }
 
+        Client client = clientDBService.findById(clientId);
+
+        List<Account> accounts = client.getAccounts();
+        accounts.add(account);
+
+        clientDBService.save(client);
+
+        return account;
     }
 
     @Override
-    public void update(Long clientId, Account account) {
+    public Account update(Long clientId, Account account) {
+        if (account == null) {
+            throw new AccountException("Account is wrong");
+        }
 
+        Client client = clientDBService.findById(clientId);
+
+        List<Account> accounts = client.getAccounts();
+        accounts.add(account);
+
+        clientDBService.save(client);
+
+        return account;
     }
 
     @Override
-    public void delete(Long clientId, Long id) {
+    public void delete(Long id) {
+        Account account = findById(id);
 
+        accountRepository.delete(account);
     }
 }

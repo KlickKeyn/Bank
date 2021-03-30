@@ -1,10 +1,12 @@
 package com.bank.service.client_service.client_db;
 
 import com.bank.exceptions.client.ClientException;
-import com.bank.model.Client;
-import com.bank.repository.ClientRepository;
+import com.bank.dao.model.Client;
+import com.bank.dao.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +21,7 @@ public class ClientDBService implements ClientDBInteraction {
     public List<Client> getAll() {
         List<Client> clients = clientRepository.findAll();
 
-        if (clients == null) {
+        if (clients.isEmpty()) {
             throw new ClientException("No clients in database");
         }
 
@@ -32,53 +34,36 @@ public class ClientDBService implements ClientDBInteraction {
             throw new ClientException("Wrong id");
         }
 
-        Optional<Client> clientOptional = clientRepository.findById(id);
-        Client client = null;
-
-        if (clientOptional.isPresent()) {
-            client = clientOptional.get();
-        }
-
-        if (client == null) {
-            throw new ClientException("No client with such id");
-        }
-
-        return client;
+        return clientRepository.findById(id)
+                .orElseThrow(() -> new ClientException("No client with such id"));
     }
 
     @Override
     public Client findByLogin(String login) {
-        if (login == null) {
-            throw new ClientException("No login");
+        if (login == null || login.isEmpty()) {
+            throw new ClientException("Login is null or empty");
         }
-
-        if (login.isEmpty()) {
-            throw new ClientException("Login is empty");
-        }
-
-        //TODO спросить у Стёпы, норма ли это или шлак ебаный
-        Optional<Client> clientOptional = clientRepository.findClientByLogin(login);
-        Client client = null;
-
-        if (clientOptional.isPresent()) {
-            client = clientOptional.get();
-        }
-
-        return client;
+        //TODO
+        return clientRepository.findClientByLogin(login)
+                .orElseThrow(() -> new ClientException("No client with such login"));
     }
 
     @Override
-    public void save(Client client) {
+    public Client save(Client client) {
         if (client == null) {
             throw new ClientException("No client");
         }
 
-        clientRepository.save(client);
+        return clientRepository.save(client);
     }
 
     @Override
-    public void update(Client client) {
-        save(client);
+    public Client update(Client client) {
+        if (client == null) {
+            throw new ClientException("No client");
+        }
+
+        return clientRepository.save(client);
     }
 
     @Override

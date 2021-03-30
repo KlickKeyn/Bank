@@ -1,6 +1,6 @@
 package com.bank.controller.admin;
 
-import com.bank.model.Client;
+import com.bank.dao.model.Client;
 import com.bank.service.client_service.client_db.ClientDBService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

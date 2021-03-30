@@ -1,4 +1,4 @@
-package com.bank.model.enums;
+package com.bank.dao.model.enums;
 
 public enum AccountStateEnum {
     LOCKED("LOCKED"),

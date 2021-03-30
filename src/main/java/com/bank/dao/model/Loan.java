@@ -1,6 +1,6 @@
-package com.bank.model;
+package com.bank.dao.model;
 
-import com.bank.model.enums.LoanTypeEnum;
+import com.bank.dao.model.enums.LoanTypeEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

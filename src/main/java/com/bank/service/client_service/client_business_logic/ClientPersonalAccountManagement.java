@@ -1,12 +1,14 @@
 package com.bank.service.client_service.client_business_logic;
 
-import com.bank.dto.ClientData;
+import com.bank.dto.client.ClientData;
 import com.bank.exceptions.client.ClientException;
-import com.bank.model.Client;
+import com.bank.dao.model.Client;
 import com.bank.service.client_service.client_db.ClientDBService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ClientPersonalAccountManagement implements PersonalAccountManagement {
@@ -15,28 +17,47 @@ public class ClientPersonalAccountManagement implements PersonalAccountManagemen
 
     @Override
     public Client registration(ClientData clientData) {
+        //todo where NPE situation DONE
+        if (clientData == null) {
+            throw new ClientException("Client DTO is null");
+        }
+
         String login = clientData.getLogin();
         String password = clientData.getPassword();
 
-        Client clientFromDb = clientDBService.findByLogin(login);
+        try {
+            Client clientFromDb = clientDBService.findByLogin(login);
+        } catch (ClientException ex) {
+            Client client = new Client(login, password);
 
-        if (clientFromDb != null) {
-            throw new ClientException("There is client with such login");
+            log.info("Client is registered");
+            return clientDBService.save(client);
         }
 
-        Client client = new Client();
-        client.setLogin(login);
-        client.setPassword(password);
-
-        clientDBService.save(client);
-
-        return client;
+        throw new ClientException("There is client with such login");
     }
 
     @Override
-    public void isTrueClient(ClientData clientData) {
+    public void deleteClient(ClientData clientData) {
+        if (isClientValid(clientData)) {
+            Client client = clientDBService.findByLogin(clientData.getLogin());
+
+            clientDBService.delete(client);
+            log.info("Client deleted");
+        }
+    }
+
+    private boolean isClientValid(ClientData clientData) {
+        if (clientData == null) {
+            throw new ClientException("Client DTO is null");
+        }
+
         String login = clientData.getLogin();
         String password = clientData.getPassword();
+
+        if (password == null || password.isEmpty()) {
+            throw new ClientException("Password is null or empty");
+        }
 
         Client client = clientDBService.findByLogin(login);
 
@@ -48,16 +69,6 @@ public class ClientPersonalAccountManagement implements PersonalAccountManagemen
             throw new ClientException("Wrong password");
         }
 
-
-    }
-
-    @Override
-    public void deleteClient(ClientData clientData) {
-        isTrueClient(clientData);
-
-        String clientLogin = clientData.getLogin();
-        Client client = clientDBService.findByLogin(clientLogin);
-
-        clientDBService.delete(client);
+        return true;
     }
 }

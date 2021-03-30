@@ -1,6 +1,6 @@
 package com.bank.service.client_service.client_db;
 
-import com.bank.model.Client;
+import com.bank.dao.model.Client;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ public interface ClientDBInteraction {
 
     Client findByLogin(String login);
 
-    void save(Client client);
+    Client save(Client client);
 
-    void update(Client client);
+    Client update(Client client);
 
     void delete(Client client);
 }

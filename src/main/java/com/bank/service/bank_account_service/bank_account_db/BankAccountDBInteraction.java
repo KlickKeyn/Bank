@@ -1,6 +1,6 @@
 package com.bank.service.bank_account_service.bank_account_db;
 
-import com.bank.model.Account;
+import com.bank.dao.model.Account;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ public interface BankAccountDBInteraction {
 
     Account findById(Long id);
 
-    void save(Long clientId, Account account);
+    Account save(Long clientId, Account account);
 
-    void update(Long clientId, Account account);
+    Account update(Long clientId, Account account);
 
-    void delete(Long clientId, Long id);
+    void delete(Long id);
 }

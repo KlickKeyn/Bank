@@ -1,4 +1,4 @@
-package com.bank.model;
+package com.bank.dao.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "history")
+@Table(name = "shares")
 @Data
 @NoArgsConstructor
-public class Event {
+public class Share {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -17,6 +17,10 @@ public class Event {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "message")
-    private String message;
+    @Column(name = "quantity")
+    private int quantity;
+
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "account")
+//    private Account account;
 }

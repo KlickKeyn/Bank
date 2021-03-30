@@ -1,7 +1,9 @@
-package com.bank.model;
+package com.bank.dao.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,13 +12,16 @@ import java.util.List;
 @Table(name = "clients")
 @Data
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NonNull
     @Column(name = "login")
     private String login;
+    @NonNull
     @Column(name = "password")
     private String password;
 

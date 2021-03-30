@@ -1,7 +1,7 @@
 package com.bank.controller.client;
 
-import com.bank.dto.ClientData;
-import com.bank.model.Client;
+import com.bank.dto.client.ClientData;
+import com.bank.dao.model.Client;
 import com.bank.service.client_service.client_business_logic.ClientPersonalAccountManagement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
